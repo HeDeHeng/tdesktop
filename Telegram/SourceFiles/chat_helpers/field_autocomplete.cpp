@@ -1045,6 +1045,7 @@ void FieldAutocomplete::Inner::paintEvent(QPaintEvent *e) {
 					st::smallCloseIconOver.paint(p, QPoint(width() - st::smallCloseIconOver.width() - skip, i * st::mentionHeight + skip), width());
 				}
 			}
+			// 屏蔽群组@后面的用户id
 			if (!_mrows->empty()) {
 				auto &row = _mrows->at(i);
 				const auto user = row.user;
@@ -1052,12 +1053,12 @@ void FieldAutocomplete::Inner::paintEvent(QPaintEvent *e) {
 						&& PrimaryUsername(user).startsWith(
 							filter,
 							Qt::CaseInsensitive))
-					? ('@' + PrimaryUsername(user).mid(0, filterSize))
+					? QString()
 					: QString();
 				auto second = first.isEmpty()
 					? (PrimaryUsername(user).isEmpty()
 						? QString()
-						: ('@' + PrimaryUsername(user)))
+						: (QString()))
 					: PrimaryUsername(user).mid(filterSize);
 				auto firstwidth = st::mentionFont->width(first);
 				auto secondwidth = st::mentionFont->width(second);
@@ -1672,7 +1673,8 @@ void InitFieldAutocomplete(
 				user->firstName.isEmpty() ? user->name() : user->firstName,
 				PrepareMentionTag(user));
 		} else {
-			field->insertTag('@' + data.mention);
+			//field->insertTag('@' + data.mention);
+			field->insertTag('@' + ( user->firstName.isEmpty() ? user->name() : user->firstName));
 		}
 	}, raw->lifetime());
 

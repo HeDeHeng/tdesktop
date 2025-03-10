@@ -211,11 +211,17 @@ void HistoryMessageForwarded::create(
 	const auto fromChannel = originalSender
 		&& originalSender->isChannel()
 		&& !originalSender->isMegagroup();
+	// 屏蔽转发人
+	const auto name = TextWithEntities{
+		.text = QString()
+	};
+	/*
 	const auto name = TextWithEntities{
 		.text = (originalSender
 			? originalSender->name()
 			: originalHiddenSenderInfo->name)
 	};
+	*/
 	if (const auto copy = originalSender) {
 		context.repaint = [=] {
 			// It is important to capture here originalSender by value,
@@ -225,10 +231,15 @@ void HistoryMessageForwarded::create(
 			// pointer may become invalid, resulting in a crash.
 			copy->owner().requestItemRepaint(item);
 		};
+
+		// 屏蔽转发人头像
+		phrase = Ui::Text::SingleCustomEmoji(QString(), QString());
+		/*
 		phrase = Ui::Text::SingleCustomEmoji(
-			copy->owner().customEmojiManager().peerUserpicEmojiData(
+			context.session->data().customEmojiManager().peerUserpicEmojiData(
 				copy,
 				st::fwdTextUserpicPadding));
+		*/
 	}
 	if (!originalPostAuthor.isEmpty()) {
 		phrase.append(
@@ -304,12 +315,14 @@ void HistoryMessageForwarded::create(
 		}
 	}
 	text.setMarkedText(st::fwdTextStyle, phrase, kMarkupTextOptions, context);
-
+	// 屏蔽头像快捷链接
+	/*
 	text.setLink(1, fromChannel
 		? JumpToMessageClickHandler(originalSender, originalId)
 		: originalSender
 		? originalSender->openLink()
 		: HiddenSenderInfo::ForwardClickHandler());
+	*/
 	if (via) {
 		text.setLink(2, via->link);
 	}

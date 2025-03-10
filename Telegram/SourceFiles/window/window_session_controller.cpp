@@ -2432,6 +2432,8 @@ void SessionController::showCalendar(Dialogs::Key chat, QDate requestedDate) {
 		box->addButton(tr::lng_cancel(), [=] {
 			box->toggleSelectionMode(false);
 		});
+		// 屏蔽清除历史记录
+		/*
 		auto text = tr::lng_profile_clear_history();
 		const auto button = box->addLeftButton(std::move(text), [=] {
 			const auto firstDate = box->selectedFirstDate();
@@ -2450,6 +2452,7 @@ void SessionController::showCalendar(Dialogs::Key chat, QDate requestedDate) {
 		if (!*selected) {
 			button->setPointerCursor(false);
 		}
+		*/
 	};
 	const auto weak = base::make_weak(this);
 	const auto weakTopic = base::make_weak(topic);

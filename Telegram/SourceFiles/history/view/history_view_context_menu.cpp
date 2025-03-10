@@ -1020,7 +1020,8 @@ void AddMessageActions(
 	AddPostLinkAction(menu, request);
 	AddForwardAction(menu, request, list);
 	AddSendNowAction(menu, request, list);
-	AddDeleteAction(menu, request, list);
+	// 屏蔽删除按钮
+	//AddDeleteAction(menu, request, list);
 	AddDownloadFilesAction(menu, request, list);
 	AddReportAction(menu, request, list);
 	AddSelectionAction(menu, request, list);

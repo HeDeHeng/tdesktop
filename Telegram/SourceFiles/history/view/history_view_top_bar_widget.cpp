@@ -1096,7 +1096,8 @@ void TopBarWidget::updateControlsVisibility() {
 		return;
 	}
 	_clear->show();
-	_delete->setVisible(_canDelete);
+	// 屏蔽删除按钮
+	_delete->setVisible(false);
 	_forward->setVisible(_canForward);
 	_sendNow->setVisible(_canSendNow);
 

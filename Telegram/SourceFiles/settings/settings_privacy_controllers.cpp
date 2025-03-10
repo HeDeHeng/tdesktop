@@ -459,12 +459,15 @@ std::unique_ptr<PeerListRow> BlockedBoxController::createRow(
 	row->setActionLink(tr::lng_blocked_list_unblock(tr::now));
 	const auto status = [&] {
 		const auto user = peer->asUser();
+		// 屏蔽黑名单中的手机号和id信息
 		if (!user) {
 			return tr::lng_group_status(tr::now);
 		} else if (!user->phone().isEmpty()) {
-			return Ui::FormatPhone(user->phone());
+			//return Ui::FormatPhone(user->phone());
+			return QString();
 		} else if (!user->username().isEmpty()) {
-			return '@' + user->username();
+			//return '@' + user->username();
+			return QString();
 		} else if (user->isBot()) {
 			return tr::lng_status_bot(tr::now);
 		}

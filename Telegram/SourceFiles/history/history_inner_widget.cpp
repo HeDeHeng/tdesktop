@@ -2630,11 +2630,14 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 					_widget->forwardSelected();
 				}, &st::menuIconForward);
 			}
+			// 屏蔽删除按钮
+			/*
 			if (selectedState.count > 0 && selectedState.canDeleteCount == selectedState.count) {
 				_menu->addAction(tr::lng_context_delete_selected(tr::now), [=] {
 					_widget->confirmDeleteSelected();
 				}, &st::menuIconDelete);
 			}
+			*/
 			if (selectedState.count > 0 && !hasCopyRestrictionForSelected()) {
 				Menu::AddDownloadFilesAction(_menu, controller, _selected, this);
 			}
@@ -2654,13 +2657,16 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 					const auto callback = [=] { deleteItem(itemId); };
 					if (item->isUploading()) {
 						_menu->addAction(tr::lng_context_cancel_upload(tr::now), callback, &st::menuIconCancel);
-					} else {
+					}
+					// 屏蔽删除按钮
+					/*
+					else {
 						_menu->addAction(Ui::DeleteMessageContextAction(
 							_menu->menu(),
 							callback,
 							item->ttlDestroyAt(),
 							[=] { _menu = nullptr; }));
-					}
+					}*/
 				}
 				if (!blockSender && item->suggestReport()) {
 					_menu->addAction(tr::lng_context_report_msg(tr::now), [=] {
@@ -2874,11 +2880,14 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 					_widget->forwardSelected();
 				}, &st::menuIconForward);
 			}
+			// 屏蔽删除按钮
+			/*
 			if (selectedState.count > 0 && selectedState.count == selectedState.canDeleteCount) {
 				_menu->addAction(tr::lng_context_delete_selected(tr::now), [=] {
 					_widget->confirmDeleteSelected();
 				}, &st::menuIconDelete);
 			}
+			*/
 			if (selectedState.count > 0 && !hasCopyRestrictionForSelected()) {
 				Menu::AddDownloadFilesAction(_menu, controller, _selected, this);
 			}
@@ -2898,13 +2907,17 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 					};
 					if (item->isUploading()) {
 						_menu->addAction(tr::lng_context_cancel_upload(tr::now), callback, &st::menuIconCancel);
-					} else {
+					} 
+					// 屏蔽删除按钮
+					/*
+					else {
 						_menu->addAction(Ui::DeleteMessageContextAction(
 							_menu->menu(),
 							callback,
 							item->ttlDestroyAt(),
 							[=] { _menu = nullptr; }));
 					}
+					*/
 				}
 				if (!canBlockSender && canReport) {
 					_menu->addAction(tr::lng_context_report_msg(tr::now), [=] {

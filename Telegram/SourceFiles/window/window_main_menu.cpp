@@ -739,7 +739,8 @@ void MainMenu::setupMenu() {
 		_menu->add(
 			object_ptr<Ui::PlainShadow>(_menu),
 			{ 0, st::mainMenuSkip, 0, st::mainMenuSkip });
-
+		// 禁止创建群组
+		/*
 		AddMyChannelsBox(addAction(
 			tr::lng_create_group_title(),
 			{ &st::menuIconGroups }
@@ -748,7 +749,7 @@ void MainMenu::setupMenu() {
 				controller->showNewGroup();
 			}
 		});
-
+		*/
 		AddMyChannelsBox(addAction(
 			tr::lng_create_channel_title(),
 			{ &st::menuIconChannel }

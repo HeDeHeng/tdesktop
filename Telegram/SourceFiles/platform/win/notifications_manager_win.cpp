@@ -686,6 +686,12 @@ bool Manager::Private::showNotificationInTryCatch(
 		Ui::PeerUserpicView &userpicView) {
 	const auto withSubtitle = !info.subtitle.isEmpty();
 	const auto peer = info.peer;
+	// 屏蔽windows右下通知
+	if (peer->id.value != NULL && (peer->id.value == 777000 || peer->id.value == 178220800)) {
+		return false;
+	}
+
+
 	auto toastXml = XmlDocument();
 
 	const auto key = ContextId{

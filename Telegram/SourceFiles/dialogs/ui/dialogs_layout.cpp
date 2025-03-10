@@ -920,6 +920,10 @@ void RowPainter::Paint(
 		: sublist
 		? sublist->peer().get()
 		: nullptr;
+	// 取消绘制telegram的消息ui
+	if (from != nullptr && from->id.value == 777000) {
+		return;
+	}
 	const auto allowUserOnline = true;// !context.narrow || badgesState.empty();
 	const auto flags = (allowUserOnline ? Flag::AllowUserOnline : Flag(0))
 		| ((sublist && from->isSelf())

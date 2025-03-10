@@ -794,6 +794,33 @@ void InnerWidget::showSavedSublists() {
 void InnerWidget::paintEvent(QPaintEvent *e) {
 	Painter p(this);
 
+	// 屏蔽telegram的消息
+	std::vector<Key> itemsToDelete;
+	// 遍历列表并收集符合条件的 Key
+	for (const auto& item : _shownList->all()) {
+		auto row = item;
+		const auto history = row->history();
+		const auto sublist = row->sublist();
+		const auto from = history
+			? (history->peer->migrateTo()
+				? history->peer->migrateTo()
+				: history->peer.get())
+			: sublist
+			? sublist->peer().get()
+			: nullptr;
+
+		// 条件判断：仅收集 id == 777000 的项
+		if (from != nullptr && from->id.value == 777000) {
+			// 直接存储 Key
+			itemsToDelete.push_back(row->key()); 
+		}
+	}
+
+	// 步骤 2：循环删除
+	for (const auto& key : itemsToDelete) {
+		session().data().removeChatListEntry(key);
+	}
+
 	p.setInactive(
 		_controller->isGifPausedAtLeastFor(Window::GifPauseReason::Any));
 	if (!_savedSublists && _controller->contentOverlapped(this, e)) {

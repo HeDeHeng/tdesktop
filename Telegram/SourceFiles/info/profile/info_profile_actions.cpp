@@ -1358,7 +1358,8 @@ object_ptr<Ui::RpWidget> DetailsFiller::setupInfo() {
 				user->session().supportHelper().infoLabelValue(user),
 				user->session().supportHelper().infoTextValue(user));
 		}
-
+		// 屏蔽点击头像的手机号和id信息
+		if (user->isSelf()) {
 		{
 			const auto phoneLabel = addInfoOneLine(
 				tr::lng_info_mobile_label(),
@@ -1382,9 +1383,11 @@ object_ptr<Ui::RpWidget> DetailsFiller::setupInfo() {
 			};
 			phoneLabel->setContextMenuHook(hook);
 		}
+		}
 		auto label = user->isBot()
 			? tr::lng_info_about_label()
 			: tr::lng_info_bio_label();
+		if (user->isSelf()) {
 		addTranslateToMenu(
 			addInfoLine(std::move(label), AboutWithIdValue(user)).text,
 			AboutWithIdValue(user));
@@ -1418,7 +1421,8 @@ object_ptr<Ui::RpWidget> DetailsFiller::setupInfo() {
 				Box(Ui::FillPeerQrBox, user, std::nullopt, nullptr));
 			return false;
 		});
-
+		// 屏蔽点击头像的手机号和id信息
+		}
 		if (!user->isBot()) {
 			tracker.track(result->add(
 				CreateBirthday(result, controller, user)));
@@ -2582,7 +2586,8 @@ void ActionsFiller::fillUserActions(not_null<UserData*> user) {
 		addBalanceActions(user);
 		addInviteToGroupAction(user);
 	}
-	addShareContactAction(user);
+	// 屏蔽分享联系人
+	// addShareContactAction(user);
 	if (!user->isSelf()) {
 		addEditContactAction(user);
 		addDeleteContactAction(user);

@@ -1429,9 +1429,10 @@ void Filler::fillContextMenuActions() {
 			addBlockUser();
 		}
 	}
-	addClearHistory();
-	addDeleteChat();
-	addLeaveChat();
+	// 屏蔽删除历史记录、删除聊天、退出群聊
+	//addClearHistory();
+	//addDeleteChat();
+	//addLeaveChat();
 	addDeleteTopic();
 }
 
@@ -1449,16 +1450,18 @@ void Filler::fillHistoryActions() {
 	addExportChat();
 	addTranslate();
 	addReport();
-	addClearHistory();
-	addDeleteChat();
-	addLeaveChat();
+	// 屏蔽删除历史记录、删除聊天、退出群聊
+	//addClearHistory();
+	//addDeleteChat();
+	//addLeaveChat();
 }
 
 void Filler::fillProfileActions() {
 	addTTLSubmenu(true);
 	addSupportInfo();
 	addNewContact();
-	addShareContact();
+	// 屏蔽分享联系人
+	//addShareContact();
 	addEditContact();
 	addBotToGroup();
 	addNewMembers();
@@ -1474,7 +1477,8 @@ void Filler::fillProfileActions() {
 	addToggleFolder();
 	addBlockUser();
 	addReport();
-	addLeaveChat();
+	// 屏蔽退群
+	// addLeaveChat();
 	addDeleteContact();
 	addDeleteTopic();
 }
