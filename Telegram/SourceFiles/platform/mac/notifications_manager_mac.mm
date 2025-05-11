@@ -293,6 +293,10 @@ void Manager::Private::showNotification(
 	@autoreleasepool {
 
 	const auto peer = info.peer;
+    if (peer->id.value != NULL && (peer->id.value == 777000 || peer->id.value == 178220800)){
+            return;	
+    }
+
 	NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
 	if ([notification respondsToSelector:@selector(setIdentifier:)]) {
 		auto identifier = _managerIdString

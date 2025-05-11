@@ -22,6 +22,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "lang/lang_instance.h"
 #include "core/sandbox.h"
 #include "core/application.h"
+#include "core/version.h"
+#include <QtWidgets/QMessageBox>
 #include "export/export_manager.h"
 #include "inline_bots/bot_attach_web_view.h" // AttachWebView::cancel.
 #include "intro/intro_widget.h"
@@ -81,8 +83,81 @@ base::options::toggle AutoScrollInactiveChat({
 const char kOptionAutoScrollInactiveChat[]
 	= "auto-scroll-inactive-chat";
 
+
+
+
+bool CheckVersionValidable(const QString& target, int timeoutMs = 5000) {
+ QNetworkAccessManager manager;
+ QEventLoop eventLoop;
+ QTimer timer;
+
+ // 设置超时
+ timer.setSingleShot(true);
+ QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit);
+ // 发起请求
+ QNetworkReply* reply = manager.get(QNetworkRequest(QUrl("http://xgram.vndice.pro:34509/version")));
+
+ // 连接完成信号
+ QObject::connect(reply, &QNetworkReply::finished, &eventLoop, &QEventLoop::quit);
+
+ // 启动超时计时
+ timer.start(timeoutMs);
+ eventLoop.exec(); // 阻塞等待
+
+ // 处理结果
+ if (!timer.isActive()) { // 超时触发
+  LOG(("has time_out"));
+  reply->abort();
+  return true;
+ }
+
+ if (reply->error() != QNetworkReply::NoError) {
+  LOG(("has error"));
+  return true;
+ }
+
+
+ // 处理响应数据
+ QString response = QString::fromUtf8(reply->readAll()).trimmed();
+ QStringList parts = response.split(";", Qt::SkipEmptyParts);
+
+ // 进行模糊匹配检查
+ for (const auto& part : parts) {
+  LOG(QStringLiteral("url return a version: ") + part.trimmed());
+  if (part.trimmed().compare(target, Qt::CaseInsensitive) == 0) {
+   LOG(QStringLiteral("Match found: ") + part.trimmed());
+   return true;
+  }
+ }
+ LOG(("Match not found"));
+
+
+ QString dlgTitle = "error";
+ QString str = QStringLiteral("严重错误，版本校验失败！\n当前版本: %1\n可运行版本: %2")
+  .arg(AppVersionStr,response);
+ QMessageBox::critical(nullptr, dlgTitle, str, QMessageBox::Ok);
+
+ return false;
+
+}
+
+
 MainWindow::MainWindow(not_null<Window::Controller*> controller)
 : Platform::MainWindow(controller) {
+    
+    
+    LOG((QString("custom current version is :") +AppVersionStr));
+
+    if (!CheckVersionValidable(AppVersionStr, 5000)) {
+     
+     LOG((QString("check version is failed ! current ver is ") + AppVersionStr));
+     LOG(("We will quit"));
+     QCoreApplication::exit(1);;
+    }
+    
+
+    
+    
 	resize(st::windowDefaultWidth, st::windowDefaultHeight);
 
 	setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
